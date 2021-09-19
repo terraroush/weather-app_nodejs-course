@@ -1,4 +1,6 @@
-const request = require("postman-request")
+const request = require("postman-request");
+const geocode = require('./utils/geocode.js')
+const forecast = require('./utils/forecast.js')
 
 // const url = "http://api.weatherstack.com/current?access_key=f2edd5254dec3786b413366cb5cd31fc&query=37.8267,-122.4233&units=f"
 
@@ -14,20 +16,22 @@ const request = require("postman-request")
 //     }
 // })
 
-const latLongUrl = "https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoidGVycmFyb3VzaCIsImEiOiJja3Rldm12eTUwMmFyMm9ubXkyZjBjc2lqIn0.saywWhSS2bchE9W5BXpqjw&limit=1"
-
-request({ url: latLongUrl, json: true }, (error, response) => {
-    if (error) {
-        console.log("Unable to connect to map service!")
-    } else if (response.body.message) {
-        console.log("Unable to provide geocode service. Check that your access code is correct.")
-    } else if (response.body.features.length === 0) {
-        console.log("Unable to find location. Try another search.")
-    } else {
-        const lat = response.body.features[0].center[1]
-        const long = response.body.features[0].center[0]
-        const latLong = `${lat} ${long}`
-        console.log(latLong)
-    }
-    
+geocode("Denver", (error, data) => {
+    console.log("Error: ", error)
+    console.log("Data: ", data)
 })
+
+//
+// Goal: Create a reusable function for getting the forecast
+//
+// 1. Setup the "forecast" function in utils/forecast.js
+// 2. Require the function in app.js and call it as shown below
+// 3. The forecast function should have three potential calls to callback:
+//    - Low level error, pass string for error
+//    - Coordinate error, pass string for error
+//    - Success, pass forecast string for data (same format as from before)
+
+forecast(39.7348, -104.9653, (error, data) => {
+    console.log('Error: ', error)
+    console.log('Data: ', data)
+  })
