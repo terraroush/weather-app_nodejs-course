@@ -6,18 +6,18 @@ const city = process.argv[2]
 if (!city) {
     return console.log("Please run program with a city")
 } else {
-    geocode(city, (error, data) => {
+    geocode(city, (error, { lat, long, location } = {}) => {
 
         if (error) {
             return console.log(error)
         }
 
-        forecast(data.lat, data.long, (error, forecastData) => {
+        forecast(lat, long, (error, forecastData) => {
             if (error) {
                 return console.log(error)
             }
 
-            console.log(data.location)
+            console.log(location)
             console.log(forecastData)
         })
     })
